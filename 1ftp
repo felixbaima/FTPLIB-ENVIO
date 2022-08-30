@@ -1,0 +1,33 @@
+#IMPORTANDO BIBLIOTECAS NECESSARIAS
+import os
+import ftplib
+#DADOS DE ACESSO AO FTP
+HOSTNAME = "ftp.*******"
+USERNAME = "******"
+PASSWORD = "******"
+#CONFIGURANDO FTP
+ftp_server = ftplib.FTP(HOSTNAME, USERNAME, PASSWORD)
+#ftp_server.set_debuglevel(2)# PARA DEBUGAR O CODIGO
+ftp_server.encoding = "utf-8"
+ftp_server.cwd('/imshealth/recebe/atacadistas/4463')
+ftp_server.retrlines('LIST')
+#ftp_server.pwd()
+
+#ENCONTRANDO OS ARQUIVOS NA MINHA MAQUINA UTILIZEI A BIBLIOTECA OS
+
+enderecopastanomeupc = 'resources/arquivos'
+arquivosims = os.listdir(enderecopastanomeupc)
+for arquivo in arquivosims:
+    nomeendereco = f'{enderecopastanomeupc}{arquivo}'
+
+#TEORICAMENTE AQUI EU DEVERIA ENVIAR PARA O FTP
+    with open(nomeendereco,"rb") as file:
+        ftp_server.storbinary(f"STOR{nomeendereco}",file)
+#ftp_server.dir()
+# PARTE DO CODIGO QUE MOSTRA O SERVIDOR DA IMS/CLOSEUP
+files = ftp_server.dir()
+wdir = ftp_server.pwd()
+print(wdir)
+print(files)
+ftp_server.dir()
+ftp_server.quit()
